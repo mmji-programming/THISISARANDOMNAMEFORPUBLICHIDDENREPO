@@ -1,3 +1,346 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>یه سورپرایز کوچولو! ✨</title>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            color: #4a5568;
+        }
+
+        /* المان‌های پس‌زمینه فانتزی */
+        .heart-bg {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.15;
+            animation: floatBg 6s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(20deg); }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(255, 154, 162, 0.3);
+            text-align: center;
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #ff477e;
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* استایل دکمه فراری */
+        #run-btn {
+            position: absolute;
+            padding: 12px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff477e, #ff7096);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 71, 126, 0.4);
+            transition: all 0.1s ease;
+            z-index: 100;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .btn-cheat {
+            padding: 10px 20px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px dashed #ff477e;
+            color: #ff477e;
+            border-radius: 12px;
+            margin-top: 150px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            display: inline-block;
+        }
+
+        /* بخش استایل جعبه‌ها */
+        .box-stage {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .gift-box {
+            font-size: 80px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        .box-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #ff5c8a;
+        }
+
+        /* انیمیشن باز شدن جعبه‌ها */
+        .pop-out {
+            animation: popOutAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popOutAnim {
+            0% { transform: scale(0.3); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* استایل بخش تبریک نهایی */
+        #final-stage {
+            display: none;
+        }
+
+        .final-card {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 24px;
+            animation: finalReveal 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes finalReveal {
+            0% { transform: scale(0.7) rotate(-5deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .big-heart {
+            font-size: 70px;
+            animation: heartbeat 1.2s infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.15); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.1); }
+            80%, 100% { transform: scale(1); }
+        }
+
+        .sparkle {
+            color: #f7b731;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart-bg" style="top: 10%; left: 10%;">🌸</div>
+    <div class="heart-bg" style="top: 20%; right: 15%; animation-delay: 2s;">💖</div>
+    <div class="heart-bg" style="bottom: 15%; left: 20%; animation-delay: 4s;">✨</div>
+    <div class="heart-bg" style="bottom: 25%; right: 10%; animation-delay: 1s;">🎀</div>
+
+    <div class="container" id="stage1">
+        <h1 id="welcome-msg">سلام دختر خانوم خوشگل! 🥰</h1>
+        <p>یه سورپرایز برات آماده کردم، ولی برای دیدنش باید دکمه زیر رو کلیک کنی! راحت باش بزن روش...</p>
+        
+        <div style="height: 120px; position: relative; width: 100%;">
+            <button id="run-btn" onmouseover="flyAway()" onclick="btnClicked()">بزن روی من! 👈</button>
+        </div>
+
+        <button class="btn-cheat" onclick="cheatPass()">ایشش! چقدر فرار میکنه؟ (کلیک کمکی) 😂</button>
+    </div>
+
+    <div class="container box-stage" id="stage2">
+        <h1 id="stage2-title">ایول! تونستی بگیریش! 🥳</h1>
+        <p id="box-desc">حالا این جعبه کادو رو باز کن ببین چیه...</p>
+        
+        <div id="box-container" class="pop-out">
+            <div class="gift-box" onclick="openBox()">🎁</div>
+        </div>
+        <div class="box-title" id="box-level">جعبه شماره ۱ از ۳</div>
+    </div>
+
+    <div class="container" id="final-stage">
+        <div class="final-card">
+            <div class="big-heart">💝</div>
+            <h1 style="font-size: 28px; line-netight: 1.5;">روزت مبارک قشنگ‌ترین! <span class="sparkle">✨</span></h1>
+            <p id="personal-wishes" style="font-size: 18px; color: #ff477e; font-weight: bold; margin-top: 15px;">
+                مرسی که با اومدنت به این دنیا، زمین رو قشنگ‌تر کردی. 🥰❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // راه‌اندازی SDK تلگرام
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // بزرگ کردن صفحه در تلگرام
+
+        // گرفتن نام کاربر از تلگرام برای شخصی‌سازی سورپرایز
+        const user = tg.initDataUnsafe?.user;
+        if (user && user.first_name) {
+            document.getElementById('welcome-msg').innerText = `سلام ${user.first_name} قشنگم! 🥰`;
+            document.getElementById('personal-wishes').innerText = `${user.first_name} عزیزم، مرسی که با اومدنت به این دنیا، اون رو جای قشنگ‌تری برای زندگی کردی. روزت کلی مبارک! ❤️✨`;
+        }
+
+        let escapeCount = 0;
+        const runBtn = document.getElementById('run-btn');
+
+        // تابع فرار کردن دکمه
+        function flyAway() {
+            escapeCount++;
+            
+            // ایجاد لرزش خفیف گوشی در تلگرام موقع فرار دکمه! (رو مخ بودن بیشتر)
+            if(tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+
+            if (escapeCount > 5) {
+                runBtn.innerText = "بابا چابک! چطوری داری میگیریم؟ 😂";
+            } else if (escapeCount > 2) {
+                runBtn.innerText = "دستت بهم نمی‌رسهه! 😜";
+            }
+
+            // محاسبه پوزیشن رندوم برای فرار دکمه در محدوده باکس
+            const x = Math.random() * 160 - 80;
+            const y = Math.random() * 60 - 30;
+            
+            runBtn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        // اگر بالاخره توانست کلیک کند یا تقلب کرد
+        function btnClicked() {
+            if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            nextStage();
+        }
+
+        function cheatPass() {
+            nextStage();
+        }
+
+        function nextStage() {
+            document.getElementById('stage1').style.display = 'none';
+            document.getElementById('stage2').style.display = 'flex';
+        }
+
+        // بخش منطق جعبه‌های تودرتو
+        let boxLevel = 1;
+        const boxes = ["🎁", "📦", "✉️"];
+        const boxDescriptions = [
+            "عه! یه جعبه دیگه توشه؟ بازش کن باز هم! 🤔",
+            "เอ๊ะ! (عه!) این یکی دیگه خیلی کوچیکه، بازش کن ببینیم تهش چیه! 👀"
+        ];
+
+        function openBox() {
+            // ویبره برای حس باز کردن جعبه
+            if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+            boxLevel++;
+            
+            const boxContainer = document.getElementById('box-container');
+            
+            // افکت ریست شدن انیمیشن
+            boxContainer.classList.remove('pop-out');
+            void boxContainer.offsetWidth; // ترفند بازنشانی انیمیشن
+            boxContainer.classList.add('pop-out');
+
+            if (boxLevel <= 3) {
+                // تغییر آیکون جعبه به جعبه بعدی
+                boxContainer.innerHTML = `<div class="gift-box" style="transform: scale(${1 - (boxLevel*0.15)})">${boxes[boxLevel-1]}</div>`;
+                document.getElementById('box-level').innerText = `جعبه شماره ${boxLevel} از ۳`;
+                document.getElementById('box-desc').innerText = boxDescriptions[boxLevel-2];
+                document.getElementById('stage2-title').innerText = "واااای بازش کن! 😂";
+            } else {
+                // اتمام بازی و نمایش سورپرایز اصلی
+                showFinalSurprise();
+            }
+        }
+
+        // انفجار نهایی و تبریک
+        function showFinalSurprise() {
+            document.getElementById('stage2').style.display = 'none';
+            document.getElementById('final-stage').style.display = 'block';
+
+            // ایجاد سوپر ویبره موفقیت در تلگرام گوشی
+            if(tg.HapticFeedback) {
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+
+            // افکت خفن شلیک کاغذ رنگی (Confetti) به صورت رگباری
+            var duration = 4 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff477e', '#ff7096', '#ffb3c1', '#ffc2d1']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff477e', '#ff7096', '#ffb3c1', '#ffc2d1']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
 </html>
